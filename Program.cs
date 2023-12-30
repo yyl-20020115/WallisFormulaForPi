@@ -14,17 +14,17 @@ public class Program
     static BigInteger WallisProductForPi(BigInteger n)
     {
         var upper = n;
-        var lower = (n<<1)+1;
+        var lower = (n << 1) + 1;
         upper += lower;
-        for(--n; n >= 1; --n)
+        for (--n; n >= 1; --n)
         {
             upper *= n;
             upper += (lower *= ((n << 1) + 1));
         }
-        
+
         upper *= BigInteger.Pow(10, (int)Math.Ceiling(BigInteger.Log10(lower)));
 
-        return (upper<<1) / lower;
+        return (upper << 1) / lower;
     }
     static BigInteger Calc_E(BigInteger n)
     {
@@ -44,7 +44,7 @@ public class Program
     static double Calc_Golden_Section(long n)
     {
         var s = 0.0;
-        for(long i = 0; i < n; i++)
+        for (long i = 0; i < n; i++)
         {
             s = 1.0 + 1.0 / s;
         }
@@ -55,7 +55,7 @@ public class Program
         var s = 0.0;
         for (long i = 0; i < n; i++)
         {
-            s = 1.0 / (2.0+s);
+            s = 1.0 / (2.0 + s);
         }
         return 1.0 + s;
     }
@@ -71,7 +71,7 @@ public class Program
     static decimal WallisProductForPiDiv2(int max)
     {
         decimal s = 0;
-        for(int n = 0; n <= max; n++)
+        for (int n = 0; n <= max; n++)
         {
             decimal f1 = Factorial1(n);
             decimal f2 = Factorial2(2 * n + 1);
@@ -118,7 +118,7 @@ public class Program
         Console.WriteLine(Calc_Sqrt2(100));
         Console.WriteLine(Calc_Golden_Section(100));
         BigInteger n = 10000;
-        
+
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         var pi = WallisProductForPi(n);
