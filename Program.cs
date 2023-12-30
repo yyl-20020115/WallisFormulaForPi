@@ -40,6 +40,25 @@ public class Program
 
         return upper / lower;
     }
+
+    static double Calc_Golden_Section(long n)
+    {
+        var s = 0.0;
+        for(long i = 0; i < n; i++)
+        {
+            s = 1.0 + 1.0 / s;
+        }
+        return s - 1.0;
+    }
+    static double Calc_Sqrt2(long n)
+    {
+        var s = 0.0;
+        for (long i = 0; i < n; i++)
+        {
+            s = 1.0 / (2.0+s);
+        }
+        return 1.0 + s;
+    }
     //单阶乘
     static long Factorial1(long n) => n >= 1 ? n * Factorial1(n - 1) : 1;
     //双阶乘
@@ -96,6 +115,8 @@ public class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
+        Console.WriteLine(Calc_Sqrt2(100));
+        Console.WriteLine(Calc_Golden_Section(100));
         BigInteger n = 10000;
         
         var stopwatch = new Stopwatch();
