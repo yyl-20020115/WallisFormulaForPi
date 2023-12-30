@@ -1,16 +1,41 @@
-﻿namespace WallisFormulaForPi;
+﻿using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Numerics;
+
+namespace WallisFormulaForPi;
 
 public class Program
 {
+    //计算圆周率的沃里斯乘积算法
+    //分子和分母分别计算
+    //最后彼此相除
+    //可以得到极高精度的计算结果
+    static BigInteger WallisProductForPi(BigInteger n)
+    {
+        var upper = n;
+        var lower = (n<<1)+1;
+        upper += lower;
+        for(--n; n >= 1; --n)
+        {
+            upper *= n;
+            upper += (lower *= ((n << 1) + 1));
+        }
+        
+        upper *= BigInteger.Pow(10, (int)Math.Ceiling(BigInteger.Log10(lower)));
+
+        return (upper<<1) / lower;
+    }
+
     //单阶乘
     static long Factorial1(long n) => n >= 1 ? n * Factorial1(n - 1) : 1;
     //双阶乘
     static long Factorial2(long n) => n >= 1 ? n * Factorial2(n - 2) : 1;
     //沃里斯乘积形式求圆周率（的一半）
     //Pi/2 = Sum(n!/(2n+1)!!,n>=0)
+    //Pi/2 = 0!/1! + 1!/3! + 2!/5!+...
     //此函数因为decimal精度不够，所以结果在第15次迭代之后出错
     //若要获得更正确的结果，请使用Python版本的WFP.py进行高次迭代
-    static decimal WallisForPiDiv2(int max)
+    static decimal WallisProductForPiDiv2(int max)
     {
         decimal s = 0;
         for(int n = 0; n <= max; n++)
@@ -57,10 +82,22 @@ public class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        double MP2 = Math.PI / 2.0;
-        for (int n = 0; n <= 30; n++)
-        {
-            Console.WriteLine($"{n}\tPi / 2 = {MP2}, s={WallisForPiDiv2(n)}");
-        }
+        BigInteger n = 100000;
+        
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var pi = WallisProductForPi(n);
+        stopwatch.Stop();
+        using var output = new StreamWriter("result.txt");
+        output.WriteLine(pi);
+
+        //Console.WriteLine(pi);
+        Console.WriteLine($"Iterates = {n}, Digits = {(int)Math.Ceiling(BigInteger.Log10(pi))}, Duration = {stopwatch.Elapsed}");
+
+        //double MP2 = Math.PI / 2.0;
+        //for (int n = 0; n <= 30; n++)
+        //{
+        //    Console.WriteLine($"{n}\tPi / 2 = {MP2}, s={WallisProductForPiDiv2(n)}");
+        //}
     }
 }

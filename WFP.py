@@ -18,9 +18,19 @@ def wallis_pi_2(m):
         s += f1 / f2
     return s
 
+def e(m):
+    s = 0
+    for n in range(0,m):
+        s += 1/factorial1(n)
+    return s
+
 print(math.pi/2)
 print(wallis_pi_2(100))
+print(math.e)
+print(e(100))
 
 # python WFP.py
 # 1.5707963267948966
 # 1.5707963267948961
+# 2.718281828459045
+# 2.7182818284590455
