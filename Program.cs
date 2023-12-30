@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net.Http.Headers;
 using System.Numerics;
 
 namespace WallisFormulaForPi;
@@ -10,6 +9,8 @@ public class Program
     //分子和分母分别计算
     //最后彼此相除
     //可以得到极高精度的计算结果
+    //Pi/2 = Sum(n!/(2n+1)!!,n>=0)
+    //Pi/2 = 0!/1! + 1!/3! + 2!/5!+...
     static BigInteger WallisProductForPi(BigInteger n)
     {
         var upper = n;
@@ -25,7 +26,20 @@ public class Program
 
         return (upper<<1) / lower;
     }
+    static BigInteger Calc_E(BigInteger n)
+    {
+        var upper = BigInteger.One;
+        var lower = n;
+        upper += lower;
+        for (--n; n >= 1; --n)
+        {
+            upper += (lower *= n);
+        }
 
+        upper *= BigInteger.Pow(10, (int)Math.Ceiling(BigInteger.Log10(lower)));
+
+        return upper / lower;
+    }
     //单阶乘
     static long Factorial1(long n) => n >= 1 ? n * Factorial1(n - 1) : 1;
     //双阶乘
@@ -82,17 +96,22 @@ public class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        BigInteger n = 100000;
+        BigInteger n = 10000;
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         var pi = WallisProductForPi(n);
         stopwatch.Stop();
-        using var output = new StreamWriter("result.txt");
-        output.WriteLine(pi);
 
+        Console.WriteLine($"pi={pi}");
         //Console.WriteLine(pi);
         Console.WriteLine($"Iterates = {n}, Digits = {(int)Math.Ceiling(BigInteger.Log10(pi))}, Duration = {stopwatch.Elapsed}");
+
+        stopwatch.Start();
+        var e = Calc_E(n);
+        stopwatch.Stop();
+        Console.WriteLine($"e={e}");
+        Console.WriteLine($"Iterates = {n}, Digits = {(int)Math.Ceiling(BigInteger.Log10(e))}, Duration = {stopwatch.Elapsed}");
 
         //double MP2 = Math.PI / 2.0;
         //for (int n = 0; n <= 30; n++)
